@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://onthemoveproductions.github.io/onthemove/sitemap.xml
+Sitemap: https://onthemove.cz/sitemap.xml
