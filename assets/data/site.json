@@ -1,4 +1,5 @@
 {
   "siteUrl": "https://onthemove.cz/",
-  "formEndpoint": "https://formspree.io/f/mgavgynw"
+  "formEndpoint": "https://formspree.io/f/mgavgynw",
+  "analyticsToken": "958cba41496f4169b74a7be6ea7b141e"
 }
