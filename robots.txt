@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://onthemoveproductions.github.io/onthemove/sitemap.xml

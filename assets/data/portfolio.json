@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "categories": [
+    {
+      "id": "reklama-socialni-site",
+      "name": {
+        "cs": "Reklama · Sociální sítě",
+        "en": "Advertisement · Social"
+      }
+    },
+    {
+      "id": "domaci-zvirata",
+      "name": {
+        "cs": "domácí zvířata",
+        "en": "Pets"
+      }
+    }
+  ],
+  "projects": [
+    {
+      "id": "serra",
+      "status": "published",
+      "featured": true,
+      "categoryId": "reklama-socialni-site",
+      "title": {
+        "cs": "SERRA",
+        "en": "SERRA"
+      },
+      "description": {
+        "cs": "Krátký film natočený pro Instagram.",
+        "en": "A short film created for Instagram."
+      },
+      "year": null,
+      "client": "",
+      "poster": "assets/img/serra-poster.jpg",
+      "video": "assets/video/serra-portfolio.mp4",
+      "updatedAt": "2026-10-03T12:51:23.909Z"
+    }
+  ]
+}
