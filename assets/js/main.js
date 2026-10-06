@@ -148,7 +148,8 @@
     // the running smoothed value, held across frames both to smooth against
     // and as the fallback for a momentarily-too-dark read (e.g. right as
     // the match is struck, or the instant the loop restarts).
-    let smoothedFlame = { x: 0.27, y: 0.34, w: 0.02, h: 0.02 };
+    const START_FLAME = { x: 0.27, y: 0.34, w: 0.02, h: 0.02 };
+    let smoothedFlame = { ...START_FLAME };
     // drawImage + getImageData is a real, continuous per-frame cost (a video
     // decode/readback, not just arithmetic) — expensive enough at 60fps to
     // compete with the browser's own scroll compositing, which is exactly
@@ -252,7 +253,13 @@
     // zone. Snapping the pan back to its home position in the same frame
     // the loop restarts keeps the crop in sync with the flame that's
     // actually on screen, instead of a stale crop from the previous burn.
+    // The remembered flame position resets too: the first seconds of each
+    // burn are dark, so the tracker would otherwise keep the burnt-out
+    // flame from the end of the last loop (far right) and pan straight back
+    // to it.
     const resetVideoPan = () => {
+      smoothedFlame = { ...START_FLAME };
+      frameCounter = 0;
       panObjPosPercent = PAN_HOME_PERCENT;
       heroVideo.style.objectPosition = `${panObjPosPercent.toFixed(1)}% center`;
       objPos.x = panObjPosPercent;
@@ -338,6 +345,7 @@
       return 100;
     };
     let prevCycleFrac = 0;
+    let resumed = true;
     // The loop reads video pixels and layout every frame, so it only runs
     // while the hero is on screen and the video is actually playing.
     let heroVisible = true;
@@ -345,6 +353,7 @@
     const start = () => {
       if (running || !heroVisible || heroVideo.paused || document.hidden) return;
       running = true;
+      resumed = true;
       requestAnimationFrame(tick);
     };
     // The hero is sticky: it never leaves the viewport, it gets covered by
@@ -359,7 +368,8 @@
     heroVideo.addEventListener("play", start);
     document.addEventListener("visibilitychange", start);
 
-    const tick = () => {
+    // A function declaration, so start() can call it before this line runs.
+    function tick() {
       if (!heroVisible || heroVideo.paused || document.hidden) {
         running = false;
         return;
@@ -370,7 +380,10 @@
         // A big backward jump in the burn's own progress (from ~1 back to
         // ~0) means the video just looped, not that time ran backward —
         // reset the pan right before this frame's update uses it.
-        if (frac < prevCycleFrac - 0.5) resetVideoPan();
+        // While scrolled away the loop is paused, so a wrap can go unseen:
+        // on the first frame back, any step backwards counts as a loop.
+        if (frac < prevCycleFrac - (resumed ? 0 : 0.5)) resetVideoPan();
+        resumed = false;
         prevCycleFrac = frac;
         // Sample the flame once per tick and feed that single reading to
         // both the video pan and the glow reprojection — updateVideoPan
@@ -390,7 +403,7 @@
         }
       }
       requestAnimationFrame(tick);
-    };
+    }
     start();
 
     // The <video> already has the `autoplay` attribute — it starts itself.

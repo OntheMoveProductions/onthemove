@@ -134,6 +134,9 @@ h1, .h1 { font-size: clamp(2.8rem, 7.5vw, 6.4rem); }
 h2, .h2 { font-size: clamp(2.2rem, 5vw, 4rem); }
 h3, .h3 { font-size: clamp(1.5rem, 2.6vw, 2rem); }
 h4, .h4 { font-size: clamp(1.15rem, 1.6vw, 1.4rem); }
+/* Czech capitals carry accents above the cap height (Š, Č, Ř, Ž, Á), which
+   collide with the line above at .9. English keeps the tighter setting. */
+:lang(cs) :is(h1, .h1, h2, .h2, h3, .h3, h4, .h4, .reel-title, .film-title) { line-height: 1.08; }
 
 .lead {
   font-weight: 300;
